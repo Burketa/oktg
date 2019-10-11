@@ -4,26 +4,26 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerDataModel
 {
-    public PlayerDataModel() { }
-
     public PlayerStats playerStats;
-
+    public Achievements achievements;
     public SoundConfig soundConfig;
 
-    //Achievements
-    //Progressao e status dos achievs
+    //Constructor
+    public PlayerDataModel() { }
 
+    //PlayerStats inner class
     [Serializable]
     public class PlayerStats
     {
-        //*Player Stats
         //Score from last game session
         public int lastScore = 0;
 
         //Longest streak of jumps
         public int longestStreak = 0;
+
         //Total number of powerups collected from all games
         public int powerupsCollected = 0;
+
         //Number of characters the player already unlocked
         public int charactersUnlocked = 0;
 
@@ -40,6 +40,8 @@ public class PlayerDataModel
         public List<int> topScores = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     }
+
+    //SoundConfig inner class
     [Serializable]
     public class SoundConfig
     {
@@ -51,6 +53,13 @@ public class PlayerDataModel
 
         //May the game play Music Sounds ?
         public bool canplayMusic = true;
+
+    }
+    [Serializable]
+    public class Achievements
+    {
+        //TODO: Achievements !
+        public float volume = 0.5f;
 
     }
 }

@@ -3,11 +3,29 @@ using System.IO;
 using System.Collections.Generic;
 public class PlayerData : MonoBehaviour
 {
+    public static PlayerData instance;
     public static PlayerDataModel playerData;
     private static string dataPath;
 
+    //Awake for singleton pattern
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            Debug.Log("Creating new Singleton instance");
+            instance = this;
+        }
+        else if (instance != this)
+        {
+            Debug.Log("Destroying instances other than the original.");
+            Destroy(gameObject);
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
     public void Start()
     {
+        // ! Windows -> Application.persistentDataPath = C:\Users\burca\AppData\LocalLow\Joysticket\Jungle Jump
         dataPath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
         playerData = LoadPlayerData(dataPath);
     }
@@ -54,6 +72,7 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    //Save player data to json file at path
     public static void SavePlayerData(PlayerDataModel data, string path)
     {
         string jsonString = JsonUtility.ToJson(data);
@@ -64,6 +83,7 @@ public class PlayerData : MonoBehaviour
         }
     }
 
+    //Load player data from json at path
     public static PlayerDataModel LoadPlayerData(string path)
     {
         if (!File.Exists(path))
