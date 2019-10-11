@@ -4,12 +4,26 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
-    public PlayerStats playerStats;
-    public Achievements achievements;
-    public SoundConfig soundConfig;
+    public Achievements achievements = new Achievements();
+    public PlayerStats playerStats = new PlayerStats();
+    public SoundConfig soundConfig = new SoundConfig();
 
     //Constructor
-    public PlayerData() { }
+    public PlayerData()
+    {
+        playerStats.lastScore = 0;
+        playerStats.feathersCollected = 0;
+        playerStats.charactersUnlocked = 0;
+        playerStats.selectedCharacter = 0;
+        playerStats.longestStreak = 0;
+        playerStats.powerupsCollected = 0;
+        playerStats.topScoresAmmount = 10;
+        playerStats.topScores = new List<int>(playerStats.topScoresAmmount);
+
+        soundConfig.canPlayFX = true;
+        soundConfig.canplayMusic = true;
+        soundConfig.volume = 0.5f;
+    }
 
     //PlayerStats inner class
     [Serializable]

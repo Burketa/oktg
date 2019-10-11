@@ -27,31 +27,14 @@ public class PersistenceController : MonoBehaviour
     {
         // ! Windows -> Application.persistentDataPath = C:\Users\burca\AppData\LocalLow\Joysticket\Jungle Jump
         dataPath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
-        playerData = LoadPlayerData(dataPath);
+        playerData = LoadPlayerData();
     }
 
     //Reset the persistence data to default values
     public static void ResetProfile()
     {
         playerData = new PlayerData();
-
-        playerData.playerStats.lastScore = 0;
-        playerData.playerStats.longestStreak = 0;
-        playerData.playerStats.powerupsCollected = 0;
-        playerData.playerStats.charactersUnlocked = 0;
-        playerData.playerStats.selectedCharacter = 0;
-        playerData.playerStats.feathersCollected = 0;
-        playerData.playerStats.topScoresAmmount = 10;
-
-        playerData.playerStats.topScores = new List<int>();
-        for (int i = 0; i < playerData.playerStats.topScoresAmmount; i++)
-            playerData.playerStats.topScores.Add(0);
-
-        playerData.soundConfig.volume = 0.5f;
-        playerData.soundConfig.canplayMusic = true;
-        playerData.soundConfig.canPlayFX = true;
-
-        SavePlayerData(playerData, dataPath);
+        SavePlayerData();
     }
 
     //Put the highscore in the list, if it is indeed a highscore and trim the list to topScoresAmmount size
@@ -65,7 +48,7 @@ public class PersistenceController : MonoBehaviour
             {
                 playerData.playerStats.topScores.Insert(index, possibleHighscore);
                 playerData.playerStats.topScores = playerData.playerStats.topScores.GetRange(0, playerData.playerStats.topScoresAmmount);
-                SavePlayerData(playerData, dataPath);
+                SavePlayerData();
                 return true;
             }
             index++;
@@ -73,12 +56,17 @@ public class PersistenceController : MonoBehaviour
         return false;
     }
 
+    public static string SavePlayerData()
+    {
+        return SavePlayerData(playerData);
+    }
+
     //Save player data to json file at path and return the written string
-    public static string SavePlayerData(PlayerData data, string path)
+    public static string SavePlayerData(PlayerData data)
     {
         string jsonString = JsonUtility.ToJson(data);
 
-        using (StreamWriter streamWriter = File.CreateText(path))
+        using (StreamWriter streamWriter = File.CreateText(dataPath))
         {
             streamWriter.Write(jsonString);
         }
@@ -87,14 +75,14 @@ public class PersistenceController : MonoBehaviour
     }
 
     //Load player data from json at path and return a PlayerData object
-    public static PlayerData LoadPlayerData(string path)
+    public static PlayerData LoadPlayerData()
     {
-        if (!File.Exists(path))
+        if (!File.Exists(dataPath))
         {
-            SavePlayerData(new PlayerData(), path);
+            SavePlayerData(new PlayerData());
         }
 
-        using (StreamReader streamReader = File.OpenText(path))
+        using (StreamReader streamReader = File.OpenText(dataPath))
         {
             string jsonString = streamReader.ReadToEnd();
             return JsonUtility.FromJson<PlayerData>(jsonString);
@@ -102,14 +90,14 @@ public class PersistenceController : MonoBehaviour
     }
 
     //Load player data from json at path and return a string
-    public static string LoadPlayerDataString(string path)
+    public static string LoadPlayerDataString()
     {
-        if (!File.Exists(path))
+        if (!File.Exists(dataPath))
         {
-            SavePlayerData(new PlayerData(), path);
+            SavePlayerData(new PlayerData());
         }
 
-        using (StreamReader streamReader = File.OpenText(path))
+        using (StreamReader streamReader = File.OpenText(dataPath))
         {
             string jsonString = streamReader.ReadToEnd();
             return jsonString;
