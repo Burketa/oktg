@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
-public class PlayerData : MonoBehaviour
+public class PersistenceController : MonoBehaviour
 {
-    public static PlayerData instance;
-    public static PlayerDataModel playerData;
+    public static PersistenceController instance;
+    public static PlayerData playerData;
     private static string dataPath;
 
     //Awake for singleton pattern
@@ -33,7 +33,7 @@ public class PlayerData : MonoBehaviour
     //Reset the persistence data to default values
     public static void ResetProfile()
     {
-        playerData = new PlayerDataModel();
+        playerData = new PlayerData();
 
         playerData.playerStats.lastScore = 0;
         playerData.playerStats.longestStreak = 0;
@@ -55,7 +55,7 @@ public class PlayerData : MonoBehaviour
     }
 
     //Put the highscore in the list, if it is indeed a highscore and trim the list to topScoresAmmount size
-    public static void CheckHighscore(int possibleHighscore)
+    public static bool CheckHighscore(int possibleHighscore)
     {
         int index = 0;
 
@@ -66,14 +66,15 @@ public class PlayerData : MonoBehaviour
                 playerData.playerStats.topScores.Insert(index, possibleHighscore);
                 playerData.playerStats.topScores = playerData.playerStats.topScores.GetRange(0, playerData.playerStats.topScoresAmmount);
                 SavePlayerData(playerData, dataPath);
-                break;
+                return true;
             }
             index++;
         }
+        return false;
     }
 
-    //Save player data to json file at path
-    public static void SavePlayerData(PlayerDataModel data, string path)
+    //Save player data to json file at path and return the written string
+    public static string SavePlayerData(PlayerData data, string path)
     {
         string jsonString = JsonUtility.ToJson(data);
 
@@ -81,20 +82,37 @@ public class PlayerData : MonoBehaviour
         {
             streamWriter.Write(jsonString);
         }
+
+        return jsonString;
     }
 
-    //Load player data from json at path
-    public static PlayerDataModel LoadPlayerData(string path)
+    //Load player data from json at path and return a PlayerData object
+    public static PlayerData LoadPlayerData(string path)
     {
         if (!File.Exists(path))
         {
-            SavePlayerData(new PlayerDataModel(), path);
+            SavePlayerData(new PlayerData(), path);
         }
 
         using (StreamReader streamReader = File.OpenText(path))
         {
             string jsonString = streamReader.ReadToEnd();
-            return JsonUtility.FromJson<PlayerDataModel>(jsonString);
+            return JsonUtility.FromJson<PlayerData>(jsonString);
+        }
+    }
+
+    //Load player data from json at path and return a string
+    public static string LoadPlayerDataString(string path)
+    {
+        if (!File.Exists(path))
+        {
+            SavePlayerData(new PlayerData(), path);
+        }
+
+        using (StreamReader streamReader = File.OpenText(path))
+        {
+            string jsonString = streamReader.ReadToEnd();
+            return jsonString;
         }
     }
 }

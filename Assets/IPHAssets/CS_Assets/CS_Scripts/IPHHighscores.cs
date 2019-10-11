@@ -10,7 +10,7 @@ public class IPHHighscores : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerDataModel.PlayerStats playerStats = PlayerData.playerData.playerStats;
+        PlayerData.PlayerStats playerStats = PersistenceController.playerData.playerStats;
 
         for (int i = 0; i < playerStats.topScoresAmmount; i++)
         {

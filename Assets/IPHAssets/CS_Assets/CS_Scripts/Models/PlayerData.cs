@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 
 [Serializable]
-public class PlayerDataModel
+public class PlayerData
 {
     public PlayerStats playerStats;
     public Achievements achievements;
     public SoundConfig soundConfig;
 
     //Constructor
-    public PlayerDataModel() { }
+    public PlayerData() { }
 
     //PlayerStats inner class
     [Serializable]

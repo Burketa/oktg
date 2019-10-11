@@ -6,7 +6,7 @@ public class IPHStatistics : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        PlayerDataModel.PlayerStats playerStats = PlayerData.playerData.playerStats;
+        PlayerData.PlayerStats playerStats = PersistenceController.playerData.playerStats;
 
         //Refatoracao: Mudando strings para interpolação
         // Set the statistics values in the statistics canvas
