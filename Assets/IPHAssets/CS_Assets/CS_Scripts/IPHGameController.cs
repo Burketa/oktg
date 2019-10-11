@@ -380,6 +380,13 @@ namespace InfiniteHopper
 
                         //Call the perfect landing function, which plays a sound and particle effect based on the player's streak
                         playerObjects[currentPlayer].gameObject.SendMessage("PerfectLanding", currentStreak);
+
+                        //Check if the current streak is greater than the previous, if it is, overwrite it
+                        if (currentStreak > longestStreak)
+                        {
+                            Debug.Log($"New Longest Streak ! (old: {longestStreak}, new: {currentStreak}");
+                            longestStreak = currentStreak;
+                        }
                     }
                     else
                     {
@@ -529,8 +536,17 @@ namespace InfiniteHopper
 
                 // Show bonus button
 
-                bonusCanvas.gameObject.SetActive(Advertisement.isReady());
+                bonusCanvas.gameObject.SetActive(Advertisement.IsReady());
 
+            }
+
+            //Check if the longest streak is greater than the persisted one, if it is, persist it
+            int persistedLongestStreak = PersistenceController.playerData.playerStats.longestStreak;
+            if (longestStreak > persistedLongestStreak)
+            {
+                Debug.Log($"New Longest Streak Persisted ! (old: {persistedLongestStreak}, new: {longestStreak})");
+                PersistenceController.playerData.playerStats.longestStreak = longestStreak;
+                PersistenceController.SavePlayerData();
             }
         }
 
@@ -684,8 +700,8 @@ namespace InfiniteHopper
             totalPowerups++;
 
             //Add this info to the persistence data
-            Debug.Log(PersistenceController.playerData.playerStats.powerupsCollected);
             PersistenceController.playerData.playerStats.powerupsCollected += totalPowerups;
+            Debug.Log($"Powerups Collected: {PersistenceController.playerData.playerStats.powerupsCollected}");
             PersistenceController.SavePlayerData();
         }
 

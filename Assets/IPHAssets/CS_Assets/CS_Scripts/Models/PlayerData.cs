@@ -18,7 +18,10 @@ public class PlayerData
         playerStats.longestStreak = 0;
         playerStats.powerupsCollected = 0;
         playerStats.topScoresAmmount = 10;
-        playerStats.topScores = new List<int>(playerStats.topScoresAmmount);
+
+        playerStats.topScores = new List<int>();
+        for (int i = 0; i < playerStats.topScoresAmmount; i++)
+            playerStats.topScores.Add(0);
 
         soundConfig.canPlayFX = true;
         soundConfig.canplayMusic = true;
