@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class IPHHighscores : MonoBehaviour
@@ -17,7 +15,6 @@ public class IPHHighscores : MonoBehaviour
         for (int i = 0; i < playerStats.topScoresAmmount; i++)
         {
             GameObject score = (GameObject)Instantiate(highScorePrefab, Vector2.zero, Quaternion.identity, contentParent);
-            score.transform.localScale = Vector3.one;
             score.GetComponent<Text>().text = $"{i + 1} - {playerStats.topScores[i]}";
         }
     }
