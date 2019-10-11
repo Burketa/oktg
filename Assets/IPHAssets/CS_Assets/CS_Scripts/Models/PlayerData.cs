@@ -24,7 +24,7 @@ public class PlayerData
             playerStats.topScores.Add(0);
 
         soundConfig.canPlayFX = true;
-        soundConfig.canplayMusic = true;
+        soundConfig.canPlayMusic = true;
         soundConfig.volume = 0.5f;
     }
 
@@ -69,7 +69,7 @@ public class PlayerData
         public bool canPlayFX = true;
 
         //May the game play Music Sounds ?
-        public bool canplayMusic = true;
+        public bool canPlayMusic = true;
 
     }
     [Serializable]
