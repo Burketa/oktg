@@ -71,7 +71,6 @@ namespace InfiniteHopper
 
         //* Caching
         private Rigidbody2D _rigidbody;
-        int i = 0;
         void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -100,22 +99,12 @@ namespace InfiniteHopper
             else
             {
                 //Can the bot play the game 
-
                 if (useBot)
                 {
-                    //if (i < 1)
-                    //{
-                    Debug.Log(isJumping);
-                    Debug.Log(isLanded);
-
                     if (isLanded && !isJumping)
                     {
-
-                        Debug.Log("no if");
-                        Jump(moveSpeed, CalculateJumpForce());
+                        Jump(moveSpeed, Bot.CalculateJumpForce(this));
                     }
-                    //i++;
-                    //}
                 }
 
                 //If we are starting to jump, charge up the jump power as long as we are holding the jump button down
@@ -345,7 +334,7 @@ namespace InfiniteHopper
             thisTransform.localScale = Vector3.one * targetScale;
         }
 
-        private Vector2 Jump(float moveSpeed, float jumpPower)
+        public Vector2 Jump(float moveSpeed, float jumpPower)
         {
             Debug.Log("Jumping");
 
@@ -358,23 +347,11 @@ namespace InfiniteHopper
             isLanded = false;
             isFalling = false;
 
-            Debug.Log(jumpPower);
+            Debug.Log($"Jump Power: {jumpPower}");
+
             //Give the player velocity based on jump power and move speed
             _rigidbody.velocity = new Vector2(moveSpeed, jumpPower);
             return _rigidbody.velocity;
-        }
-        private float CalculateJumpForce()
-        {
-            Debug.Log("calculating");
-            float jumpForce = 0;
-
-            Transform nextColumn = GameObject.Find("Columns").transform.GetChild(0);
-            //TODO: Ajustar calculo da força para o bot...
-            jumpForce = (nextColumn.position.x - transform.position.x) * jumpPower;
-
-            // !Retirar isso
-            jumpForce = 15;
-            return jumpForce;
         }
     }
 }

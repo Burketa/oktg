@@ -531,6 +531,7 @@ namespace InfiniteHopper
                 if (score > highScore)
                 {
                     highScore = score;
+                    PersistenceController.CheckHighscore(highScore);
                 }
 
                 //Write the high sscore text
