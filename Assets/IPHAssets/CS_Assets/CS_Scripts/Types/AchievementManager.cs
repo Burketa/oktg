@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
-public class PersistenceController : MonoBehaviour
+public class AchievementManager : MonoBehaviour
 {
-    public static PersistenceController instance;
-    public static PlayerData playerData;
+    public static AchievementManager instance;
+    public static List<Achievement> achievements;
     private static string dataPath;
 
     //Awake for singleton pattern
@@ -26,43 +26,24 @@ public class PersistenceController : MonoBehaviour
     public void Start()
     {
         // ! Windows -> Application.persistentDataPath = C:\Users\burca\AppData\LocalLow\Joysticket\Jungle Jump
-        dataPath = Path.Combine(Application.persistentDataPath, "PlayerData.json");
-        playerData = LoadPlayerData();
+        dataPath = Path.Combine(Application.persistentDataPath, "Achievements.json");
+        achievements = LoadAchievements();
     }
 
     //Reset the persistence data to default values
     public static void ResetProfile()
     {
-        playerData = new PlayerData();
-        SavePlayerData();
+        achievements = new List<Achievement>();
+        SaveAchievements();
     }
 
-    //Put the highscore in the list, if it is indeed a highscore and trim the list to topScoresAmmount size
-    public static bool CheckHighscore(int possibleHighscore)
+    public static string SaveAchievements()
     {
-        int index = 0;
-
-        foreach (int score in new List<int>(playerData.playerStats.topScores))
-        {
-            if (possibleHighscore >= score)
-            {
-                playerData.playerStats.topScores.Insert(index, possibleHighscore);
-                playerData.playerStats.topScores = playerData.playerStats.topScores.GetRange(0, playerData.playerStats.topScoresAmmount);
-                SavePlayerData();
-                return true;
-            }
-            index++;
-        }
-        return false;
-    }
-
-    public static string SavePlayerData()
-    {
-        return SavePlayerData(playerData);
+        return SaveAchievements(achievements);
     }
 
     //Save player data to json file at path and return the written string
-    public static string SavePlayerData(PlayerData data)
+    public static string SaveAchievements(List<Achievement> data)
     {
         string jsonString = JsonUtility.ToJson(data);
 
@@ -75,26 +56,26 @@ public class PersistenceController : MonoBehaviour
     }
 
     //Load player data from json at path and return a PlayerData object
-    public static PlayerData LoadPlayerData()
+    public static List<Achievement> LoadAchievements()
     {
         if (!File.Exists(dataPath))
         {
-            SavePlayerData(new PlayerData());
+            SaveAchievements(new List<Achievement>());
         }
 
         using (StreamReader streamReader = File.OpenText(dataPath))
         {
             string jsonString = streamReader.ReadToEnd();
-            return JsonUtility.FromJson<PlayerData>(jsonString);
+            return JsonUtility.FromJson<List<Achievement>>(jsonString);
         }
     }
 
     //Load player data from json at path and return a string
-    public static string LoadPlayerDataString()
+    public static string LoadAchievementsString()
     {
         if (!File.Exists(dataPath))
         {
-            SavePlayerData(new PlayerData());
+            SaveAchievements(new List<Achievement>());
         }
 
         using (StreamReader streamReader = File.OpenText(dataPath))

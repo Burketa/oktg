@@ -86,12 +86,12 @@ namespace InfiniteHopper
         {
             if (!soundObject.tag.Equals(tag))
             {
-                Debug.Log($"Can Play FX ?: {state}");
+                //Debug.Log($"Can Play FX ?: {state}");
                 PersistenceController.playerData.soundConfig.canPlayFX = state;	//? Pq não funciona ?
             }
             else
             {
-                Debug.Log($"Can Play Music ?: {state}");
+                //Debug.Log($"Can Play Music ?: {state}");
                 PersistenceController.playerData.soundConfig.canPlayMusic = state;
             }
 

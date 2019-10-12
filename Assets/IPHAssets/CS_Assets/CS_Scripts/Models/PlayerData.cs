@@ -4,7 +4,6 @@ using System.Collections.Generic;
 [Serializable]
 public class PlayerData
 {
-    public Achievements achievements = new Achievements();
     public PlayerStats playerStats = new PlayerStats();
     public SoundConfig soundConfig = new SoundConfig();
 
@@ -70,13 +69,6 @@ public class PlayerData
 
         //May the game play Music Sounds ?
         public bool canPlayMusic = true;
-
-    }
-    [Serializable]
-    public class Achievements
-    {
-        //TODO: Achievements !
-        public float volume = 0.5f;
 
     }
 }
