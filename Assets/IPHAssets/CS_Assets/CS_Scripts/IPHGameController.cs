@@ -27,6 +27,9 @@ namespace InfiniteHopper
         //A list of background elements that loop
         public LoopingBackground[] loopingBackground;
 
+        //The transform parent for the columns
+        public Transform columnsParent;
+
         //A list of columns that that randomly appear as the player moves forward
         public Transform[] columns;
 
@@ -303,7 +306,7 @@ namespace InfiniteHopper
                     randomColumn = Mathf.FloorToInt(Random.Range(0, movingColumns.Length));
 
                     //Create a random column from the list of available moving columns
-                    newColumn = Instantiate(movingColumns[randomColumn], nextColumnPosition, Quaternion.identity) as Transform;
+                    newColumn = Instantiate(movingColumns[randomColumn], nextColumnPosition, Quaternion.identity, columnsParent) as Transform;
                 }
                 else
                 {
@@ -311,7 +314,7 @@ namespace InfiniteHopper
                     randomColumn = Mathf.FloorToInt(Random.Range(0, columns.Length));
 
                     //Create a random column from the list of available columns
-                    newColumn = Instantiate(columns[randomColumn], nextColumnPosition, Quaternion.identity) as Transform;
+                    newColumn = Instantiate(columns[randomColumn], nextColumnPosition, Quaternion.identity, columnsParent) as Transform;
                 }
 
                 // Record the first column we land on

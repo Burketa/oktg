@@ -28,7 +28,7 @@ namespace InfiniteHopper
         public Transform powerBar;
 
         //The *horizontal* movement speed of the player when it is jumping
-        public float moveSpeed = 4;
+        public readonly float moveSpeed = 4;
 
         //The particle effects that will play when the player jumps and lands on a column
         public ParticleSystem jumpEffect;
@@ -66,9 +66,12 @@ namespace InfiniteHopper
         // Is the player dead?
         internal bool isDead = false;
 
-        //! Caching
-        private Rigidbody2D _rigidbody;
+        //Is the game being played by the bot ?
+        public bool useBot = false;
 
+        //* Caching
+        private Rigidbody2D _rigidbody;
+        int i = 0;
         void Start()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
@@ -93,8 +96,28 @@ namespace InfiniteHopper
                 //if the player is dead, make it stop the rigidbody simulation, after a delay, when properly offscreen
                 Utils.Invoke(this, () => { _rigidbody.simulated = false; }, 0.5f);
             }
+
             else
             {
+                //Can the bot play the game 
+
+                if (useBot)
+                {
+                    //if (i < 1)
+                    //{
+                    Debug.Log(isJumping);
+                    Debug.Log(isLanded);
+
+                    if (isLanded && !isJumping)
+                    {
+
+                        Debug.Log("no if");
+                        Jump(moveSpeed, CalculateJumpForce());
+                    }
+                    //i++;
+                    //}
+                }
+
                 //If we are starting to jump, charge up the jump power as long as we are holding the jump button down
                 if (startJump == true)
                 {
@@ -222,15 +245,7 @@ namespace InfiniteHopper
                 //You can only jump if you are on land, and you already charged up the jump power ( jump start )
                 if (isLanded == true && startJump == true)
                 {
-                    thisTransform.parent = null;
-
-                    startJump = false;
-                    isJumping = true;
-                    isLanded = false;
-                    isFalling = false;
-
-                    //Give the player velocity based on jump power and move speed
-                    _rigidbody.velocity = new Vector2(moveSpeed, jumpPower);
+                    Jump(moveSpeed, jumpPower);
 
                     //Play the jump ( launch ) animation
                     if (GetComponent<Animation>() && animationJumpEnd)
@@ -266,7 +281,10 @@ namespace InfiniteHopper
         //This function runs when the player succesfully lands on a column
         void PlayerLanded()
         {
+            Debug.Log("Player Landed");
+
             isLanded = true;
+            isJumping = false;
 
             //Play the landing animation
             if (GetComponent<Animation>() && animationLanded)
@@ -325,6 +343,38 @@ namespace InfiniteHopper
 
             //Rescale the object to the target scale instantly, so we make sure that we got the the target
             thisTransform.localScale = Vector3.one * targetScale;
+        }
+
+        private Vector2 Jump(float moveSpeed, float jumpPower)
+        {
+            Debug.Log("Jumping");
+
+            //Make the player no longer be a child of the platform
+            thisTransform.parent = null;
+
+            //Set the appropriate variables to the jumping state
+            startJump = false;
+            isJumping = true;
+            isLanded = false;
+            isFalling = false;
+
+            Debug.Log(jumpPower);
+            //Give the player velocity based on jump power and move speed
+            _rigidbody.velocity = new Vector2(moveSpeed, jumpPower);
+            return _rigidbody.velocity;
+        }
+        private float CalculateJumpForce()
+        {
+            Debug.Log("calculating");
+            float jumpForce = 0;
+
+            Transform nextColumn = GameObject.Find("Columns").transform.GetChild(0);
+            //TODO: Ajustar calculo da força para o bot...
+            jumpForce = (nextColumn.position.x - transform.position.x) * jumpPower;
+
+            // !Retirar isso
+            jumpForce = 15;
+            return jumpForce;
         }
     }
 }
