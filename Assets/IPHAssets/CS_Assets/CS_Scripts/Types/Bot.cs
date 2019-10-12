@@ -27,21 +27,15 @@ public class Bot : MonoBehaviour
     }
     private static float CalculateLaunchSpeed(InfiniteHopper.IPHPlayer player, Transform target)
     {
+        InfiniteHopper.IPHColumn column = target.GetComponent<InfiniteHopper.IPHColumn>();
+
         Vector2 offset = target.position - player.transform.position;
         Debug.Log(offset);
 
-        float distance = offset.x;
-        float yOffset = offset.y;
-        Debug.Log("distance: " + distance);
-        Debug.Log("yoffset: " + yOffset);
+        //TODO: Descobrir como calcular a força nescessária quando a plataforma esta variando a altura
+        float Vy = (Mathf.Abs(Physics2D.gravity.y) / 2) * (offset.x / player.moveSpeed);
 
-        float angle = Mathf.Acos(player.moveSpeed * Mathf.Deg2Rad);
-        Debug.Log("angle: " + angle);
-
-        //TODO: Descobrir como calcular a força nescessária...
-        float jumpForce = (1 / Mathf.Cos(angle)) * Mathf.Sqrt((0.5f * -Physics2D.gravity.y * Mathf.Pow(distance, 2)) / (distance * Mathf.Tan(angle) + yOffset));
-
-        Debug.Log(jumpForce);
-        return jumpForce;
+        Debug.Log(Vy);
+        return Vy;
     }
 }
